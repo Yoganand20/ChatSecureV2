@@ -3,7 +3,8 @@
   "version": "2.0.0",
   "main": "src/index.js",
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "nodemon src/index.js",
+    "prod":"nodemon src/index.js"
   },
   "type": "module",
   "author": "yoganand",
@@ -12,11 +13,13 @@
   "dependencies": {
     "backend-cs2": "file:",
     "bcrypt": "^6.0.0",
+    "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
     "express": "^5.1.0",
     "express-validator": "^7.2.1",
+    "helmet": "^8.1.0",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.15.0",

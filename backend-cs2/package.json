@@ -4,7 +4,7 @@
   "main": "src/index.js",
   "scripts": {
     "dev": "nodemon src/index.js",
-    "prod": "pm2 start src/index.js --name backend-cs2"
+    "prod": "pm2 start src/index.js --name backend-cs2 --no-daemon -f"
   },
   "type": "module",
   "author": "yoganand",

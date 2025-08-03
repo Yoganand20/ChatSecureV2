@@ -4,7 +4,7 @@
   "main": "src/index.js",
   "scripts": {
     "dev": "nodemon src/index.js",
-    "prod":"pm2 start src/index.js --name backend-cs2"
+    "prod": "pm2 start src/index.js --name backend-cs2"
   },
   "type": "module",
   "author": "yoganand",
@@ -23,6 +23,7 @@
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.15.0",
+    "pm2": "^6.0.8",
     "socket.io": "^4.8.1"
   },
   "devDependencies": {

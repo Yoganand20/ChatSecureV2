@@ -3,7 +3,7 @@ import useChatStore from "../store/chatStore.js";
 import useMessageStore from "../store/messageStore.js";
 import dexieDb from "./dexieDb.js";
 import EncryptionUtils from "../utils/encryptionUtils.js";
-import { syncData } from "./DataSync.js";
+import { syncData } from "./dataSync.js";
 const ACK_TIMEOUT = 5000;
 const MAX_RETRIES = 3;
 

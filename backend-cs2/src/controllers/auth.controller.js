@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { validationResult } from "express-validator";
 import User from "../models/user.model.js";
 import RefreshToken from "../models/refreshToken.model.js";
-import TokenDeliveryService from "../services/auth/TokenDelivery.Service.js";
+import TokenDeliveryService from "../services/auth/tokenDelivery.Service.js";
 import {
     generateAccessToken,
     generateRefreshToken,

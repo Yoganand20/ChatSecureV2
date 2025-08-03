@@ -18,7 +18,7 @@ class SocketManager {
         if (this.socket) this.disconnect();
 
         return new Promise((resolve, reject) => {
-            this.socket = io("http://localhost:5005", {
+            this.socket = io(import.meta.env.VITE_BACKEND_URL, {
                 transports: ["polling", "websocket"],
                 auth: { userId },
                 reconnectionAttempts: 5,

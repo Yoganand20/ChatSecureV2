@@ -6,7 +6,7 @@ import useAuthStore from '../store/authStore';
 import useChatStore from '../store/chatStore';
 
 import { socketManager } from '../lib/socketManager';
-import { syncData } from '../lib/DataSync';
+import { syncData } from '../lib/dataSync';
 const ChatHome = () => {
   const { authUser } = useAuthStore();
   const { selectedChat, loadChats } = useChatStore();

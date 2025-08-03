@@ -4,6 +4,9 @@ dotenv.config();
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import helmet from "helmet";
+import compression from "compression";
+
 import { app, httpServer } from "./lib/socket.io.js";
 import Database from "./lib/database.js";
 
@@ -18,6 +21,8 @@ Database.connect();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(helmet());
+app.use(compression());
 
 app.use(
     cors({

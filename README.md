@@ -5,6 +5,8 @@ A full-stack, end-to-end encrypted chat application with real-time messaging, bu
 
 It uses JWT for authentication(access,refresh token), AES for encryption and ECDH for Asynchronous keys exchange. 
 
+(View Live app here)[https://chatsecureapp-i317.onrender.com]
+
 ChatSecureV1 can be found (here)[https://github.com/Yoganand20/chatsecure-backend]
 
 <img src="screenshots/login.png" width="700" />

@@ -8,11 +8,13 @@ import {
 import useChatStore from "../../../store/chatStore.js";
 import NewChatMainStep from "./NewChatMainStep.jsx";
 import { GroupDetailsStep } from "./GroupDetailsStep.jsx";
-// import useAuthStore from "../store/authStore.js";
- 
+import useAuthStore from "../store/authStore.js";
+import { syncData } from '../lib/dataSync';
+
 const ChatCreationModal = ({ isOpen, onClose }) => {
     const [step, setStep] = useState("main");
-    //const {authUser} =useAuthStore();
+    const { authUser } = useAuthStore();
+    const { loadChats } = useChatStore();
     const [chatState, setChatState] = useState({
         isGroupMode: false,
         searchResults: [],
@@ -39,8 +41,12 @@ const ChatCreationModal = ({ isOpen, onClose }) => {
         onClose();
     };
 
-    const handleCreateChat = (chatData) => {
+    const handleCreateChat = async(chatData) => {
         createChat(chatData);
+        // Sync data from server to Dexie
+        await syncData.syncUserData(authUser._id);
+        // Load chats from Dexie
+        await loadChats();
         handleClose();
     };
 

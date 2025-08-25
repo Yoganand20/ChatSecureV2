@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react";
 import useChatStore from "@store/chatStore";
 import useAuthStore from "@store/authStore";
+import useMessageStore from "@/store/messageStore";
 import { socketManager } from "@lib/socketManager";
 import dexieDb from "@lib/dexieDb";
 
@@ -9,7 +10,7 @@ const ChatInput = () => {
 	const [sending, setSending] = useState(false);
 	const { selectedChat } = useChatStore();
 	const { authUser } = useAuthStore();
-
+	const { addMessage } = useMessageStore();
 	// Handle sending new message
 	const handleSendMessage = useCallback(
 		async (event) => {
@@ -23,16 +24,15 @@ const ChatInput = () => {
 
 				const otherMembers = chatMembers.filter((member) => member !== authUser._id);
 
-				const messagePromises = otherMembers.map(async (receiver) => {
-					// Send message via socket    chatId, receiverId, plaintext
-					return socketManager.sendEncrypted({
-						chatId: selectedChat.chatId,
-						receiverId: receiver,
-						senderId: authUser._id,
-						plaintext: message,
-					});
+				const messageData = await socketManager.sendMessage({
+					chatId: selectedChat.chatId,
+					receiverIds: otherMembers,
+					senderId: authUser._id,
+					plaintext: message.trim(),
 				});
-				await Promise.all(messagePromises);
+
+				addMessage(messageData);
+
 				setMessage("");
 			} catch (error) {
 				console.error("Failed to send message:", error);

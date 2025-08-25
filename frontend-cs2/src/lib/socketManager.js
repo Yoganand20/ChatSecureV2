@@ -102,6 +102,104 @@ class SocketManager {
  
 	//          public helpers
 
+	async sendEncryptedToUser({ chatId, receiverId, senderId, plaintext }) {
+        try {
+            const sharedKey = await dexieDb.loadKey(receiverId);
+            const { encryptedText, iv } = sharedKey
+                ? await EncryptionUtils.encrypt(plaintext, sharedKey)
+                : { encryptedText: plaintext, iv: "" };
+
+            const msg = {
+                chatId,
+                receiverId,
+                senderId,
+                encryptedMessage: encryptedText,
+                iv,
+                messageType: "text",
+                timeSent: new Date(),
+            };
+
+            const serverMsg = await this.#emitWithRetry("send-encrypted", msg);
+            return serverMsg;
+        } catch (error) {
+            console.error("Failed to send message to user:", receiverId, error);
+            throw error;
+        }
+    }
+
+    // New method for group messaging
+    async sendEncryptedToGroup({ chatId, receiverIds, senderId, plaintext }) {
+        try {
+            // Send to all recipients in parallel
+            const sendPromises = receiverIds.map(receiverId => 
+                this.sendEncryptedToUser({ chatId, receiverId, senderId, plaintext })
+            );
+            
+            const results = await Promise.allSettled(sendPromises);
+            
+            // Check for failures
+            const failures = results.filter(result => result.status === 'rejected');
+            if (failures.length > 0) {
+                console.warn(`Failed to send to ${failures.length} recipients:`, failures);
+            }
+
+            // Return the first successful result for message metadata
+            const firstSuccess = results.find(result => result.status === 'fulfilled');
+            if (firstSuccess) {
+                // Create message object for local storage (without receiverId)
+                const messageForStorage = {
+                    id: firstSuccess.value._id,
+                    chatId: firstSuccess.value.chatId,
+                    senderId,
+                    message: plaintext,
+                    encryptedMessage: firstSuccess.value.encryptedMessage,
+                    iv: firstSuccess.value.iv,
+                    messageType: "text",
+                    timeSent: firstSuccess.value.sentTime,
+                };
+
+                return messageForStorage;
+            } else {
+                throw new Error("Failed to send message to all recipients");
+            }
+        } catch (error) {
+            console.error("Failed to send group message:", error);
+            throw error;
+        }
+    }
+
+    // Wrapper method that decides between DM and group
+    async sendMessage({ chatId, receiverIds, senderId, plaintext }) {
+        if (receiverIds.length === 1) {
+            // Direct message
+            const serverMsg = await this.sendEncryptedToUser({
+                chatId,
+                receiverId: receiverIds[0],
+                senderId,
+                plaintext
+            });
+
+            return {
+                id: serverMsg._id,
+                chatId: serverMsg.chatId,
+                senderId,
+                message: plaintext,
+                encryptedMessage: serverMsg.encryptedMessage,
+                iv: serverMsg.iv,
+                messageType: "text",
+                timeSent: serverMsg.sentTime,
+            };
+        } else {
+            // Group message
+            return this.sendEncryptedToGroup({
+                chatId,
+                receiverIds,
+                senderId,
+                plaintext
+            });
+        }
+    }
+	/*
 	async sendEncrypted({ chatId, receiverId, senderId, plaintext }) {
 		try {
 			const sharedKey = await dexieDb.loadKey(receiverId);
@@ -144,7 +242,7 @@ class SocketManager {
 			console.error("Failed to send message:", error);
 			throw error;
 		}
-	}
+	}*/
 
 	/** Send our public ECDH key to a peer. */
 	sendPublicKey(receiverId, publicKeyArray) {

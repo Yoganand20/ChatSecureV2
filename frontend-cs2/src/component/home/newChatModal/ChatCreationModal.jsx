@@ -8,8 +8,8 @@ import {
 import useChatStore from "../../../store/chatStore.js";
 import NewChatMainStep from "./NewChatMainStep.jsx";
 import { GroupDetailsStep } from "./GroupDetailsStep.jsx";
-import useAuthStore from "../store/authStore.js";
-import { syncData } from '../lib/dataSync';
+import useAuthStore from "../../../store/authStore.js";
+import { syncData } from '../../../lib/dataSync';
 
 const ChatCreationModal = ({ isOpen, onClose }) => {
     const [step, setStep] = useState("main");

@@ -17,10 +17,10 @@ const GroupDetailsStep = ({
 
     const handleCreateGroup = () => {
         onCreateChat({
-            type: "group",
-            users: selectedUsers,
-            name: groupName,
-            picture: groupPicture,
+            isGroup: false,
+            memberIds: selectedUsers,
+            chatName: groupName,
+            profilPic: groupPicture,
         });
     };
 
@@ -106,23 +106,24 @@ const GroupNameInput = ({ groupName, onChange }) => (
 
 const MembersList = ({ users }) => (
     <div className="mb-6">
+        {console.log(users)}
         <p className="text-sm font-medium text-gray-700 mb-2">
             Members ({users.length})
         </p>
         <div className="space-y-2 max-h-40 overflow-y-auto">
             {users.map((user) => (
                 <div
-                    key={user.id}
+                    key={user._id}
                     className="flex items-center space-x-3 p-2 rounded-lg bg-gray-50">
                     <div className="avatar">
                         <div className="w-8 h-8 rounded-full">
                             <img
                                 src={user.avatar || "/default-avatar.png"}
-                                alt={user.name}
+                                alt={user.username}
                             />
                         </div>
                     </div>
-                    <div className="text-sm font-medium">{user.name}</div>
+                    <div className="text-sm font-medium">{user.username}</div>
                 </div>
             ))}
         </div>

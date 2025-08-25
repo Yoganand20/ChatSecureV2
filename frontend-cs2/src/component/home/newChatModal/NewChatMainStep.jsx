@@ -37,9 +37,9 @@ const NewChatMainStep = ({
 
     const handleUserSelect = (user) => {
         if (isGroupMode) {
-            const isSelected = selectedUsers.find((u) => u.id === user.id);
+            const isSelected = selectedUsers.find((u) => u._id === user._id);
             const newSelectedUsers = isSelected
-                ? selectedUsers.filter((u) => u.id !== user.id)
+                ? selectedUsers.filter((u) => u._id !== user._id)
                 : [...selectedUsers, user];
             updateChatState({ selectedUsers: newSelectedUsers });
         } else {
@@ -77,14 +77,15 @@ const NewChatMainStep = ({
                 className="mb-4"
             />
 
-            {isGroupMode && selectedUsers.length > 0 && (
+            {/* {isGroupMode && selectedUsers.length > 0 && (
                 <SelectedUsers
                     users={selectedUsers}
                     onRemove={handleUserSelect} 
                 />
-            )}
+            )} */}
             <UserList
                 users={searchResults}
+                selectedUserIds={new Set(selectedUsers.map(user => user._id))}
                 loading={loading}
                 emptyMessage={emptyMessage}
                 onSelect={handleUserSelect}
@@ -139,7 +140,7 @@ export const SelectedUsers = ({ users, onRemove }) => (
         <p className="text-sm text-gray-600 mb-2">Selected ({users.length}):</p>
         <div className="flex flex-wrap gap-2">
             {users.map((user) => (
-                <div key={user.id} className="badge badge-primary gap-2">
+                <div key={user._id} className="badge badge-primary gap-2">
                     {user.name}
                     <button
                         onClick={() => onRemove(user)}

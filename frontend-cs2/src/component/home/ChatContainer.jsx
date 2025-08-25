@@ -69,8 +69,8 @@ const ChatContainer = () => {
 
   if (!selectedChat) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-base-100">
-        <div className="text-center">
+      <div className="flex-1 flex justify-center items-center bg-base-100 h-full">
+        <div className="text-center items-center">
           <h2 className="text-2xl font-bold text-base-content mb-2">
             Welcome to Chat
           </h2>
@@ -83,16 +83,16 @@ const ChatContainer = () => {
   }
 
   return (
-    <div className="flex-1 flex flex-col bg-base-100">
+    <div className="flex-1 flex flex-col bg-base-100 h-full">
       {/* Chat Header */}
       <div className="sticky top-0 z-10 bg-base-100 flex-none">
         <ChatHeader />
       </div>
 
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="overflow-y-auto p-4 space-y-4 h-full" >
         {messages.length === 0 ? (
-          <div className="text-center py-8">
+          <div className="text-center py-8 h-full items-center">
             <p className="text-base-content/70">No messages yet. Start the conversation!</p>
           </div>
         ) : (

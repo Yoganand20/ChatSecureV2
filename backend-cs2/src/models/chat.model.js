@@ -12,9 +12,7 @@ const chatSchema = new mongoose.Schema(
         },
         profilePic: {
             type: String,
-            required: function () {
-                return this.isGroup;
-            },
+            
         },
         members: [
             {

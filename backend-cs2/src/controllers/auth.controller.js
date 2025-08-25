@@ -78,8 +78,8 @@ export async function signup(req, res) {
 
 export async function login(req, res) {
     const { username, password, forcedLogin } = req.body;
-    console.log("Attempting to login");
-    console.log(username,password,forcedLogin);
+    console.log("Attempting to login :" ,username);
+
 
     try {
         const user = await User.findOne({ username });
@@ -103,7 +103,7 @@ export async function login(req, res) {
             });
         }
         if (forcedLogin == "true") {
-            console.log("User will be logged out of any existing session");
+            console.log("User will be logged out of any existing session.: ",user.username);
             await RefreshToken.deleteOne({ userId: user._id });
         }
         console.log("User authenticated. Generating JWT tokens.");

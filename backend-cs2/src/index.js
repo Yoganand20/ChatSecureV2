@@ -52,7 +52,6 @@ app.get("/health", (req, res) => {
 });
 
 app.all("/{*any}", (req, res) => {
-    console.log()
     res.status(404).json({
         success: false,
         message: "Route not found",

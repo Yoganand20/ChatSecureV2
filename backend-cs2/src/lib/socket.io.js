@@ -74,7 +74,6 @@ io.on("connection", async (socket) => {
                 from: userId,
                 publicKey,
             });
-            console.log("ack", ack);
             if (ack !== "received") {
                 const keyDoc = await ChatKey.create({
                     senderId: userId,

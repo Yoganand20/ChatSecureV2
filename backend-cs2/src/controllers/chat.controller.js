@@ -76,7 +76,7 @@ export async function createChat(req, res) {
         const { chatName, memberIds = [], isGroup, profilePic } = req.body;
         const userId = req.user.userId;
 
-        const allMembers = [...new Set([userId, ...memberIds.map(String)])];
+        const allMembers = [...new Set([userId, ...memberIds])];
         await validateUserIds(allMembers, isGroup);
 
         if (!isGroup) {
@@ -107,7 +107,7 @@ export async function createChat(req, res) {
             return res.status(400).json({
                 success: false,
                 message: "Validation failed",
-                errors: validation.errors.map((err) => ({
+                errors: errors.map((err) => ({
                     field: err.path.join("."),
                     message: err.message,
                     type: err.type,
@@ -238,17 +238,17 @@ function validateChatData(payload) {
                 "any.unknown": "chatName not permitted for direct chats",
             }),
 
-        profilePic: Joi.string()
-            .uri()
-            .when("isGroup", {
-                is: true,
-                then: Joi.required(),
-                otherwise: Joi.optional(),
-            })
-            .messages({
-                "any.required": "profilePic required for group chats",
-                "string.uri": "profilePic must be a valid URI",
-            }),
+        // profilePic: Joi.string()
+        //     .uri()
+        //     .when("isGroup", {
+        //         is: true,
+        //         then: Joi.required(),
+        //         otherwise: Joi.optional(),
+        //     })
+        //     .messages({
+        //         "any.required": "profilePic required for group chats",
+        //         "string.uri": "profilePic must be a valid URI",
+        //     }),
 
         members: Joi.array()
             .items(Joi.string().pattern(/^[0-9a-fA-F]{24}$/))
